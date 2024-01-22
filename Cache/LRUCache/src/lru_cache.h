@@ -40,6 +40,9 @@ private:
     if(this->head == nullptr and this->tail == nullptr) {
       this->head = node;
       this->tail = node;
+      this->head->next = this->head->prev = this->tail;
+      this->tail->prev = this->tail->next = this->head;
+
       return;
     }
 
@@ -65,7 +68,7 @@ public:
 
   // Get value from cache
   // Complexity: O(1)
-  V* get(const K& key) {
+  Node<K, V>* get(const K& key) {
     if(this->map.find(key) == this->map.end())
       return nullptr;
 
@@ -73,7 +76,37 @@ public:
     this->remove(node);
     this->set_head(node);
 
-    return &(node->value);
+    return node;
+  }
+
+  // Get head value from cache
+  // Complexity: O(1)
+  Node<K, V>* get_head() {
+    if(this->head == nullptr)
+      return nullptr;
+
+    return this->head;
+  }
+
+  // Get tail value from cache
+  // Complexity: O(1)
+  Node<K, V>* get_tail() {
+    if(this->tail == nullptr)
+      return nullptr;
+
+    return this->tail;
+  }
+
+  // Get size of cache
+  // Complexity: O(1)
+  size_t get_size() {
+    return this->map.size();
+  }
+
+  // Get capacity of cache
+  // Complexity: O(1)
+  size_t get_capacity() {
+    return this->capacity;
   }
 
   // Set value to cache
@@ -104,11 +137,16 @@ public:
   // Clear double linked list nodes
   // Complexity: O(1)
   ~LRUCache() {
+    if(this->head == nullptr and this->tail == nullptr)
+      return;
+
     Node<K, V>* curr = this->head;
-    while (curr != nullptr) {
-      Node<K, V> * next = curr->next;
+    this->tail->next = nullptr;
+
+    do {
+      Node<K, V>* next = curr->next;
       delete curr;
       curr = next;
-    }
+    } while(curr != nullptr);
   }
 };

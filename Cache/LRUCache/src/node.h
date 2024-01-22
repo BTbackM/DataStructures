@@ -22,6 +22,9 @@ struct Node {
   }
 
   ~Node() {
+    this->next = nullptr;
+    this->prev = nullptr;
+
     delete this->next;
     delete this->prev;
   }

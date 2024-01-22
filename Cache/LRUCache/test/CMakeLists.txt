@@ -18,3 +18,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src)
 add_test_executable(node_test
   node_test.cpp
 )
+
+add_test_executable(lru_test
+  lru_test.cpp
+)
